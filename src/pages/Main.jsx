@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import MainLayout from '../components/MainLayout';
-import { Button } from '@material-ui/core';
+import { Button, } from '@material-ui/core';
 import axios from 'axios';
+//import BottomBar from '../components/BottomBar';
 
 class Main extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,15 +22,15 @@ class Main extends Component {
     } catch(e) {
       console.log(e);
     }
-    
-
   }
 
   render() {
     return <MainLayout>
       <Button variant='contained' color='primary' onClick={this.handleOnClick}>Call API</Button>
       <h3>API Result - {this.state.result}</h3>
+      {/**<BottomBar></BottomBar> */} 
     </MainLayout>;
+    
   }
 }
 
