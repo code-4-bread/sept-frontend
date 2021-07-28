@@ -9,8 +9,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
-import { Button, Divider, List, ListItem } from '@material-ui/core';
+import { Button, Divider, Grid, List, ListItem } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     width: 'auto',
   },
   bar: {
-    background: '#00395b'
+    background: '#00395b',
   },
   loginButton: {
     background: '#ffffff',
@@ -43,11 +44,11 @@ function MainLayout ({ children }){
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  /*
+  
   const handleChange = (event) => {
     setAuth(event.target.checked);
   };
-*/
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -61,9 +62,14 @@ function MainLayout ({ children }){
     setState(open);
   };
 
+  const history = useHistory();
+  const routeChange = () => {
+    history.push('/Login');
+  };
+
   const menuItems = () => (
     <List>
-      <ListItem button>Categories</ListItem>
+      <ListItem button>Home</ListItem>
       <ListItem button>High Demand</ListItem>
       <ListItem button>Recommended</ListItem>
       <ListItem button>Singapore</ListItem>
@@ -88,7 +94,7 @@ function MainLayout ({ children }){
             <SwapHorizontalCircleIcon />
             Skill Swap
           </Typography>
-          <Button className={classes.loginButton} variant="contained">Login</Button>
+          <Button className={classes.loginButton} variant="contained" onClick={routeChange}>Login</Button>
           {auth && (
             <div>
               <IconButton
@@ -123,7 +129,7 @@ function MainLayout ({ children }){
           )}
         </Toolbar>
       </AppBar>
-      
+
       <div>
         <Drawer anchor={'left'} open={state} onClose={toggleDrawer(false)}>
           {menuItems()}

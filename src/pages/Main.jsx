@@ -25,11 +25,11 @@ class Main extends Component {
   }
 
   render() {
-    return <MainLayout>
+    return <div>
       <Button variant='contained' color='primary' onClick={this.handleOnClick}>Call API</Button>
       <h3>API Result - {this.state.result}</h3>
       {/**<BottomBar></BottomBar> */} 
-    </MainLayout>;
+    </div>;
     
   }
 }
