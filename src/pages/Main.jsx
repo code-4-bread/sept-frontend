@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import MainLayout from '../components/MainLayout';
 import { Button, } from '@material-ui/core';
 import axios from 'axios';
-//import BottomBar from '../components/BottomBar';
 
 class Main extends Component {
 
@@ -30,7 +28,6 @@ class Main extends Component {
       <h3>API Result - {this.state.result}</h3>
       {/**<BottomBar></BottomBar> */} 
     </div>;
-    
   }
 }
 

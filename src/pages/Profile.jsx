@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography} from '@material-ui/core';
+import { Button, Grid, Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import Card from '@material-ui/core/Card';
@@ -35,7 +35,7 @@ function Profile() {
   return ( 
     <div className={classes.root}>
       <Grid container direction="column" justifyContent="flex-start" alignItems="center" spacing={4}>
-        <Grid item xs={4}>
+        <Grid item xs={12}>
           <Card className={classes.card}>
             <CardMedia
               className={classes.media}
@@ -53,7 +53,7 @@ function Profile() {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Card className={classes.aboutMe}>
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -69,7 +69,7 @@ function Profile() {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Card className={classes.aboutMe}>
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -85,7 +85,7 @@ function Profile() {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <Card className={classes.aboutMe}>
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
@@ -93,6 +93,24 @@ function Profile() {
               </Typography>
               <Typography className={classes.pos} color="textSecondary">
               Blah Blah Blah
+              </Typography>   
+            </CardContent>
+            <CardActions>
+              <Button size="small">Edit</Button>
+            </CardActions>
+          </Card>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Card className={classes.aboutMe}>
+            <CardContent>
+              <Typography className={classes.title} color="textSecondary" gutterBottom>
+               Contact Details
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary">
+              HP: +65 XXXX XXXX 
+                <br />
+              Email: john.smith@skillswap.com
               </Typography>   
             </CardContent>
             <CardActions>
