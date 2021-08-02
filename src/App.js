@@ -1,11 +1,10 @@
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { isAuthenticated } from './services/AuthService';
 import Login from './pages/Login';
-import MainPage from './pages/MainPage';
 import Profile from './pages/Profile';
 import MainLayout from './components/MainLayout';
-import Main from './pages/Main';
 import Account from './pages/Account';
-import Browse from './pages/Browse';
 import Listings from './pages/Listings';
 
 // routes all the pages into the main app
@@ -15,22 +14,16 @@ function App() {
       <MainLayout>
         <Switch>
           <Route exact path="/">
-            <MainPage />
+            {isAuthenticated ? <Listings /> : <Login />}
           </Route>
-          <Route path="/Login">
-            <Login />
+          <Route exact path="/login">
+            {isAuthenticated ? <Listings /> : <Login />}
           </Route>
-          <Route path="/Profile">
-            <Profile />
+          <Route exact path="/profile">
+            {isAuthenticated ? <Profile /> : <Login />}
           </Route>
-          <Route path="/Account">
-            <Account />
-          </Route>
-          <Route path="/Browse">
-            <Browse />
-          </Route>
-          <Route path="/Listings">
-            <Listings />
+          <Route exact path="/account">
+            {isAuthenticated ? <Account /> : <Login />}
           </Route>
         </Switch>
       </MainLayout>

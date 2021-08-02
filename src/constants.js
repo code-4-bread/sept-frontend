@@ -1,0 +1,1 @@
+export const TUTOR_AUTH_TOKEN = 'tutor_auth_token';

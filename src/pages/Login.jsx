@@ -1,40 +1,91 @@
-import { Button, Grid, TextField} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import { Button, Grid, TextField } from '@material-ui/core';
+import { TUTOR_AUTH_TOKEN } from '../constants';
+import axios from 'axios';
+import React, { Component } from 'react';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginTop: 100
-  },
-  button: {
-    background: '#00395b',
-  },
-  register: {
-    marginLeft: 7,
-    //background: '#227e88',
+class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { email: '', password: '' };
+
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnLogin = this.handleOnLogin.bind(this);
   }
-}));
 
-function Login() {
-  const classes = useStyles();
-    
-  return ( 
-    <div className={classes.root}>
-      <Grid container direction="column" justifyContent="center" alignItems="center" spacing={4}>
-        <Grid item>
-          <TextField label="Username" variant="outlined" />
+  handleOnChange(event) {
+    event.preventDefault();
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  async handleOnLogin(event) {
+    event.preventDefault();
+    try {
+      const result = await axios.post('http://localhost:8080/auth/login', {
+        email: this.state.email,
+        password: this.state.password,
+      });
+      localStorage.setItem(
+        TUTOR_AUTH_TOKEN,
+        result.data.accessToken.access_token
+      );
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  render() {
+    return (
+      <div style={{ flexGrow: 1, marginTop: 100 }}>
+        <Grid
+          container
+          direction='column'
+          justifyContent='center'
+          alignItems='center'
+          spacing={4}
+        >
+          <Grid item>
+            <TextField
+              label='Email'
+              name='email'
+              type='email'
+              variant='outlined'
+              onChange={this.handleOnChange}
+              value={this.state.email}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label='Password'
+              name='password'
+              variant='outlined'
+              onChange={this.handleOnChange}
+              value={this.state.password}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              style={{ background: '#00395b' }}
+              onClick={this.handleOnLogin}
+            >
+              Login
+            </Button>
+            <Button
+              variant='outlined'
+              color='primary'
+              style={{ marginLeft: 7 }}
+            >
+              Register
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item>
-          <TextField label="Password" variant="outlined" />
-        </Grid>
-        <Grid item>
-          <Button variant="contained" color="primary" className={classes.button}>Login</Button>
-          <Button variant="outlined" color="primary" className={classes.register}>Register</Button>
-        </Grid>
-      </Grid>
-    </div>
-  );
-};
- 
+      </div>
+    );
+  }
+}
+
 export default Login;
