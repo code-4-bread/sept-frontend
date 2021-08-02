@@ -23,9 +23,6 @@ function App() {
           <Route path="/Profile">
             <Profile />
           </Route>
-          <Route path="/Main">
-            <Main />
-          </Route>
           <Route path="/Account">
             <Account />
           </Route>

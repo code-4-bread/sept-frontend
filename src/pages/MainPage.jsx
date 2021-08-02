@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Main from './Main';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +36,7 @@ function MainPage() {
       </Grid>
       <Grid container direction="column" justifyContent="center" alignItems="center" className={classes.api}>
         <Grid item>
-          <Main></Main>
+        
         </Grid>
       </Grid>
       <Grid container>
