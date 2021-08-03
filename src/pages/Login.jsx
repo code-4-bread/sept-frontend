@@ -61,6 +61,7 @@ class Login extends Component {
               label='Password'
               name='password'
               variant='outlined'
+              type='password'
               onChange={this.handleOnChange}
               value={this.state.password}
             />
