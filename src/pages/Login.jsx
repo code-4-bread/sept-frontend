@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from '@material-ui/core';
-import { TUTOR_AUTH_TOKEN } from '../constants';
+import {CURRENT_USER_EMAIL, CURRENT_USER_ID, TUTOR_AUTH_TOKEN} from '../constants';
 import axios from 'axios';
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
@@ -27,9 +27,18 @@ class Login extends Component {
         email: this.state.email,
         password: this.state.password,
       });
+      console.log(result.data);
       localStorage.setItem(
         TUTOR_AUTH_TOKEN,
-        result.data.accessToken.access_token
+        result.data.data.accessToken
+      );
+      localStorage.setItem(
+        CURRENT_USER_ID,
+        result.data.data.user.id
+      );
+      localStorage.setItem(
+        CURRENT_USER_EMAIL,
+        result.data.data.user.email
       );
       window.location.reload();
     } catch (e) {

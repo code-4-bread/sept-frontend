@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '', displayName: '', type: '1', userCreated: false };
+    this.state = { email: '', password: '', displayName: '', type: '1', about: '', userCreated: false };
     
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnRegister = this.handleOnRegister.bind(this);
@@ -91,6 +91,17 @@ class Register extends Component {
               type='password'
               onChange={this.handleOnChange}
               value={this.state.password}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label='About me'
+              name='about'
+              variant='outlined'
+              multiline
+              rows={4}
+              onChange={this.handleOnChange}
+              value={this.state.about}
             />
           </Grid>
           <Grid item>
