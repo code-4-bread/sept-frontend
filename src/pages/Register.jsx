@@ -1,54 +1,59 @@
-import { Button, Grid, TextField } from '@material-ui/core';
-import { TUTOR_AUTH_TOKEN } from '../constants';
+import React, {Component} from 'react';
 import axios from 'axios';
-import React, { Component } from 'react';
+import {Button, Checkbox, FormControlLabel, Grid, Snackbar, TextField} from '@material-ui/core';
 import {Link} from 'react-router-dom';
 
-class Login extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
-
+    this.state = { email: '', password: '', displayName: '', type: '1', userCreated: false };
+    
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleOnLogin = this.handleOnLogin.bind(this);
+    this.handleOnRegister = this.handleOnRegister.bind(this);
   }
-
+  
   handleOnChange(event) {
     event.preventDefault();
     this.setState({
       [event.target.name]: event.target.value,
     });
   }
-
-  async handleOnLogin(event) {
+  
+  async handleOnRegister(event) {
     event.preventDefault();
     try {
-      const result = await axios.post('http://localhost:8080/auth/login', {
+      await axios.post('http://localhost:8080/users/create', {
         email: this.state.email,
         password: this.state.password,
+        display_name: this.state.displayName,
+        type: this.state.type,
       });
-      localStorage.setItem(
-        TUTOR_AUTH_TOKEN,
-        result.data.accessToken.access_token
-      );
+      this.setState({
+        email: '', password: '', displayName: '', type: '1', userCreated: true
+      });
       window.location.reload();
     } catch (e) {
       console.log(e);
     }
   }
-
-  render() {
+  
+  render () {
     return (
       <div style={{ flexGrow: 1, marginTop: 100 }}>
+        <Snackbar
+          open={this.state.userCreated}
+          message="User created"
+          
+        />
         <Grid
           container
           direction='column'
           justifyContent='center'
           alignItems='center'
-  
+          
         >
           <Grid item>
-            <h1>Login</h1>
+            <h1>Register</h1>
           </Grid>
         </Grid>
         <Grid
@@ -58,6 +63,16 @@ class Login extends Component {
           alignItems='center'
           spacing={4}
         >
+          <Grid item>
+            <TextField
+              label='Display name'
+              name='displayName'
+              type='text'
+              variant='outlined'
+              onChange={this.handleOnChange}
+              value={this.state.displayName}
+            />
+          </Grid>
           <Grid item>
             <TextField
               label='Email'
@@ -79,23 +94,35 @@ class Login extends Component {
             />
           </Grid>
           <Grid item>
+            <FormControlLabel
+              control={<Checkbox checked={this.state.type === '1'} onChange={this.handleOnChange} name="type" />}
+              label='Instructor'
+              value={1}
+            />
+            <FormControlLabel
+              control={<Checkbox checked={this.state.type === '2'} onChange={this.handleOnChange} name="type" />}
+              label='Learner'
+              value={2}
+            />
+          </Grid>
+          <Grid item>
             <Button
               variant='contained'
               color='primary'
               style={{ background: '#00395b' }}
-              onClick={this.handleOnLogin}
+              onClick={this.handleOnRegister}
             >
-              Login
+              Register
             </Button>
             <Link
-              to='/register'
+              to='/login'
             >
               <Button
                 variant='outlined'
                 color='primary'
                 style={{ marginLeft: 7 }}
               >
-                Register
+                Login
               </Button>
             </Link>
           </Grid>
@@ -105,4 +132,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Register;
