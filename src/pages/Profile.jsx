@@ -1,126 +1,148 @@
-import { Button, Grid, Typography} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardActions from '@material-ui/core/CardActions';
+import {Button, Grid, TextField, Typography} from '@material-ui/core';
+import React, {Component} from 'react';
+import {CURRENT_USER_EMAIL} from '../constants';
+import axios from 'axios';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginTop: 10
-  },
-  button: {
-    background: '#00395b',
-  },
-  register: {
-    marginLeft: 7,
-    //background: '#227e88',
-  },
-  media: {
-    height: 140,
-  },
-  card: {
-    width: 345, 
-  },
-  aboutMe: {
-    width: 600
-  }
-}));
-
-function Profile() {
-  const classes = useStyles();
+class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { id: '',email: '', displayName: '', about: '', isEdit: false};
     
-  return ( 
-    <div className={classes.root}>
-      <Grid container direction="column" justifyContent="flex-start" alignItems="center" spacing={4}>
-        <Grid item xs={12}>
-          <Card className={classes.card}>
-            <CardMedia
-              className={classes.media}
-              image="/static/images/cards/contemplative-reptile.jpg"
-              title="Contemplative Reptile"
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnSave = this.handleOnSave.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+  }
+  
+  async componentDidMount() {
+    const data = await axios.post('http://localhost:8080/users/find', {email: localStorage.getItem(CURRENT_USER_EMAIL)});
+    const {
+      display_name: displayName,
+      email,
+      about,
+      _id: id,
+    } = data.data.user;
+    
+    
+    this.setState({
+      displayName,
+      id,
+      email,
+      about
+    });
+  }
+  
+  async handleCancel() {
+    const data = await axios.post('http://localhost:8080/users/find', {email: localStorage.getItem(CURRENT_USER_EMAIL)});
+    const {
+      display_name: displayName,
+      email,
+      about,
+      _id: id,
+    } = data.data.user;
+  
+  
+    this.setState({
+      displayName,
+      id,
+      email,
+      about,
+      isEdit: false
+    });
+  }
+  
+  handleOnChange(event) {
+    event.preventDefault();
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
+  
+  async handleOnSave() {
+    const data = await axios.post('http://localhost:8080/users/update', {
+      id: this.state.id,
+      email: this.state.email,
+      display_name: this.state.displayName,
+      about: this.state.about,
+    });
+  
+    const {
+      display_name: displayName,
+      email,
+      about,
+    } = data.data.user;
+    localStorage.setItem(CURRENT_USER_EMAIL, email);
+    this.setState({
+      displayName,
+      email,
+      about,
+      isEdit: false
+    });
+  }
+  
+  render() {
+    return (
+      <div style={{flexGrow: 1, marginTop: 10}}>
+        <Grid container direction="column" justifyContent="center" alignItems="center" spacing={4}>
+          <Grid item>
+            <Typography variant="h3">My Profile</Typography>
+          </Grid>
+          <Grid item>
+            <TextField
+              disabled={!this.state.isEdit}
+              label='Display name'
+              name='displayName'
+              type='text'
+              variant='outlined'
+              value={this.state.displayName}
+              onChange={this.handleOnChange}
             />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-            User 
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-            Student/Lecturer
-              </Typography>
-            </CardContent>
-          </Card>
+          </Grid>
+          <Grid item>
+            <TextField
+              disabled={!this.state.isEdit}
+              label='Email'
+              name='email'
+              type='text'
+              variant='outlined'
+              value={this.state.email}
+              onChange={this.handleOnChange}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              disabled={!this.state.isEdit}
+              multiline
+              rows={4}
+              label='About'
+              name='about'
+              type='text'
+              variant='outlined'
+              value={this.state.about}
+              onChange={this.handleOnChange}
+            />
+          </Grid>
+          <Grid item>
+            {this.state.isEdit ?
+              (
+                <>
+                  <Button variant="contained" color="primary" onClick={this.handleCancel}>
+                    Cancel
+                  </Button>
+                  <Button variant="contained" color="primary" onClick={this.handleOnSave}>
+                    Save
+                  </Button>
+                </>
+              )
+              :
+              <Button variant="contained" color="primary" onClick={() => this.setState({isEdit: !this.state.isEdit})}>
+                Edit
+              </Button>
+            }
+          </Grid>
         </Grid>
-
-        <Grid item xs={6}>
-          <Card className={classes.aboutMe}>
-            <CardContent>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-               About Me
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-              Blah Blah Blah
-              </Typography>   
-            </CardContent>
-            <CardActions>
-              <Button size="small">Edit</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Card className={classes.aboutMe}>
-            <CardContent>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-               Certifications
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-              Blah Blah Blah
-              </Typography>   
-            </CardContent>
-            <CardActions>
-              <Button size="small">Edit</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Card className={classes.aboutMe}>
-            <CardContent>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-               Previous Experience (Lecturers Only)
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-              Blah Blah Blah
-              </Typography>   
-            </CardContent>
-            <CardActions>
-              <Button size="small">Edit</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid item xs={6}>
-          <Card className={classes.aboutMe}>
-            <CardContent>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-               Contact Details
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-              HP: +65 XXXX XXXX 
-                <br />
-              Email: john.smith@skillswap.com
-              </Typography>   
-            </CardContent>
-            <CardActions>
-              <Button size="small">Edit</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
  
 export default Profile;
