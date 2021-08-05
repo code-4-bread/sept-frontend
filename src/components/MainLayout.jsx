@@ -74,11 +74,7 @@ function MainLayout({ children }) {
     history.push('/profile');
     handleClose();
   };
-
-  const routeAccount = () => {
-    history.push('/account');
-    handleClose();
-  };
+  
   //======Menu Items======//
   const menuItems = [
     {
@@ -86,8 +82,8 @@ function MainLayout({ children }) {
       path: '/',
     },
     {
-      text: 'Account',
-      path: '/account',
+      text: 'Profile',
+      path: '/profile',
     },
   ];
 
@@ -156,7 +152,6 @@ function MainLayout({ children }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={routeProfile}>Profile</MenuItem>
-                <MenuItem onClick={routeAccount}>My Account</MenuItem>
                 <MenuItem
                   onClick={() => {
                     localStorage.setItem(TUTOR_AUTH_TOKEN, '');

@@ -7,6 +7,7 @@ import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
 import Listings from './pages/Listings';
 import Register from './pages/Register';
+import Course from './pages/Course';
 
 // routes all the pages into the main app
 function App() {
@@ -19,6 +20,9 @@ function App() {
           </Route>
           <Route exact path="/login">
             {isAuthenticated ? <Listings /> : <Login />}
+          </Route>
+          <Route exact path="/course">
+            {isAuthenticated ? <Course /> : <Login />}
           </Route>
           <Route exact path="/register">
             {isAuthenticated ? <Listings /> : <Register />}

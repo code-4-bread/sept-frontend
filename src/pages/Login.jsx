@@ -27,7 +27,6 @@ class Login extends Component {
         email: this.state.email,
         password: this.state.password,
       });
-      console.log(result.data);
       localStorage.setItem(
         TUTOR_AUTH_TOKEN,
         result.data.data.accessToken
