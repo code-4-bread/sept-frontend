@@ -37,26 +37,25 @@ class Listings extends Component {
   
     userData.data.users.forEach((each) => {
       userMap[each._id] = each.display_name;
-      userFilterOptions.push({
-        id: each._id,
-        name: each.display_name,
-      });
+      if (each.type === INSTRUCTOR_USER_TYPE) {
+        userFilterOptions.push({
+          id: each._id,
+          name: each.display_name,
+        });
+      }
     });
     this.setState({courses: data.data.courses, users: userMap, userFilterOptions});
   }
   
   async handleOnChange(event) {
     event.preventDefault();
-    
-    let newCourses;
+    const data = await axios.get('http://localhost:8080/course/findAll');
+    let newCourses = data.data.courses;
+
     if (event.target.name === 'typeFilter' && event.target.value !== '') {
-      newCourses = this.state.courses.filter((each) => each.type === event.target.value);
+      newCourses = newCourses.filter((each) => each.type === event.target.value);
     } else if (event.target.name === 'userFilter' && event.target.value !== '') {
-      newCourses = this.state.courses.filter((each) => each.created_by === event.target.value);
-    } else {
-      const data = await axios.get('http://localhost:8080/course/findAll');
-      
-      newCourses = data.data.courses;
+      newCourses = newCourses.filter((each) => each.created_by === event.target.value);
     }
     this.setState({
       [event.target.name]: event.target.value,
@@ -89,11 +88,11 @@ class Listings extends Component {
     ));
     
     const courseTypeFilterItems = courseTypes.map((each) => (
-      <MenuItem value={each}>{each}</MenuItem>
+      <MenuItem key={each} value={each}>{each}</MenuItem>
     ));
   
     const userFilterItems = this.state.userFilterOptions.map((each) => (
-      <MenuItem value={each.id}>{each.name}</MenuItem>
+      <MenuItem key={each.id} value={each.id}>{each.name}</MenuItem>
     ));
     
     return (
