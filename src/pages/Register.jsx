@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {Button, Checkbox, FormControlLabel, Grid, Snackbar, TextField} from '@material-ui/core';
 import {Link} from 'react-router-dom';
+import {INSTRUCTOR_USER_TYPE, LEARNER_USER_TYPE} from '../constants';
 
 class Register extends Component {
   constructor(props) {
@@ -106,12 +107,12 @@ class Register extends Component {
           </Grid>
           <Grid item>
             <FormControlLabel
-              control={<Checkbox checked={this.state.type === '1'} onChange={this.handleOnChange} name="type" />}
+              control={<Checkbox checked={this.state.type === INSTRUCTOR_USER_TYPE} onChange={this.handleOnChange} name="type" />}
               label='Instructor'
               value={1}
             />
             <FormControlLabel
-              control={<Checkbox checked={this.state.type === '2'} onChange={this.handleOnChange} name="type" />}
+              control={<Checkbox checked={this.state.type === LEARNER_USER_TYPE} onChange={this.handleOnChange} name="type" />}
               label='Learner'
               value={2}
             />

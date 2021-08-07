@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from '@material-ui/core';
-import {CURRENT_USER_EMAIL, CURRENT_USER_ID, TUTOR_AUTH_TOKEN} from '../constants';
+import {CURRENT_USER_EMAIL, CURRENT_USER_ID, CURRENT_USER_TYPE, TUTOR_AUTH_TOKEN} from '../constants';
 import axios from 'axios';
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
@@ -33,11 +33,15 @@ class Login extends Component {
       );
       localStorage.setItem(
         CURRENT_USER_ID,
-        result.data.data.user.id
+        result.data.data.user._id
       );
       localStorage.setItem(
         CURRENT_USER_EMAIL,
         result.data.data.user.email
+      );
+      localStorage.setItem(
+        CURRENT_USER_TYPE,
+        result.data.data.user.type
       );
       window.location.reload();
     } catch (e) {
