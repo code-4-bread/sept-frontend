@@ -10,6 +10,7 @@ import {
 import {courseTypes} from '../courseTypes';
 import axios from 'axios';
 import {CURRENT_USER_ID} from '../constants';
+import {Link} from 'react-router-dom';
 
 class Course extends Component {
   constructor(props) {
@@ -118,6 +119,18 @@ class Course extends Component {
             >
               Create
             </Button>
+            <Link
+              to='/'
+              style={{textDecoration: 'none'}}
+            >
+              <Button
+                variant='outlined'
+                color='primary'
+                style={{ marginLeft: 7 }}
+              >
+                Back to listing
+              </Button>
+            </Link>
           </Grid>
         </Grid>
       </div>

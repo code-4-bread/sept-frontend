@@ -9,11 +9,12 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
-import { Button, List, ListItem, ListItemText } from '@material-ui/core';
+import {Button, List, ListItem, ListItemText} from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import { useHistory, useLocation } from 'react-router';
 import { isAuthenticated } from '../services/AuthService';
 import { TUTOR_AUTH_TOKEN } from '../constants';
+
 //=======custom CSS==========//
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 function MainLayout({ children }) {
   const classes = useStyles();
 
-  const [auth, setAuth] = React.useState(true);
+  const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -59,7 +60,7 @@ function MainLayout({ children }) {
   };
 
   const [state, setState] = React.useState(false);
-  const toggleDrawer = (open) => (event) => {
+  const toggleDrawer = (open) => () => {
     setState(open);
   };
 
@@ -68,6 +69,10 @@ function MainLayout({ children }) {
   const history = useHistory();
   const routeChange = () => {
     history.push('/');
+  };
+  
+  const routeMyCourse = () => {
+    history.push('/my-courses');
   };
 
   const routeProfile = () => {
@@ -84,6 +89,10 @@ function MainLayout({ children }) {
     {
       text: 'Profile',
       path: '/profile',
+    },
+    {
+      text: 'My courses',
+      path: '/my-courses',
     },
   ];
 
@@ -152,6 +161,7 @@ function MainLayout({ children }) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={routeProfile}>Profile</MenuItem>
+                <MenuItem onClick={routeMyCourse}>My courses</MenuItem>
                 <MenuItem
                   onClick={() => {
                     localStorage.setItem(TUTOR_AUTH_TOKEN, '');
@@ -186,7 +196,7 @@ function MainLayout({ children }) {
       </div>
 
       <div className={classes.page}>
-        <div className={classes.toolbar}></div>
+        <div className={classes.toolbar} />
         {children}
       </div>
     </div>

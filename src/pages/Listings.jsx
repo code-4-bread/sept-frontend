@@ -12,7 +12,7 @@ import {
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import {CURRENT_USER_TYPE, INSTRUCTOR_USER_TYPE, LEARNER_USER_TYPE} from '../constants';
+import {CURRENT_USER_ID, CURRENT_USER_TYPE, INSTRUCTOR_USER_TYPE, LEARNER_USER_TYPE} from '../constants';
 import {courseTypes} from '../courseTypes';
 
 class Listings extends Component {
@@ -20,6 +20,7 @@ class Listings extends Component {
     super(props);
     this.state = {
       courses: [],
+      userCourses: [],
       users: {},
       userFilterOptions: [],
       typeFilter: '',
@@ -27,6 +28,7 @@ class Listings extends Component {
     };
     
     this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnEnroll = this.handleOnEnroll.bind(this);
   }
   
   async componentDidMount() {
@@ -34,6 +36,15 @@ class Listings extends Component {
     const userData = await axios.get('http://localhost:8080/users/findAll');
     const userMap = {};
     const userFilterOptions = [];
+    let userCourses = [];
+  
+    if (localStorage.getItem(CURRENT_USER_TYPE) === LEARNER_USER_TYPE) {
+      const userCoursesData = await axios.post('http://localhost:8080/courses-to-user/findByUserId', {
+        user_id: localStorage.getItem(CURRENT_USER_ID),
+      });
+      
+      userCourses = userCoursesData.data.courses.map((each) => each.course_id);
+    }
   
     userData.data.users.forEach((each) => {
       userMap[each._id] = each.display_name;
@@ -44,7 +55,8 @@ class Listings extends Component {
         });
       }
     });
-    this.setState({courses: data.data.courses, users: userMap, userFilterOptions});
+
+    this.setState({courses: data.data.courses, users: userMap, userFilterOptions, userCourses});
   }
   
   async handleOnChange(event) {
@@ -63,6 +75,17 @@ class Listings extends Component {
     });
   }
   
+  async handleOnEnroll(event, courseId) {
+    event.preventDefault();
+    if (confirm('Are you sure you want to enroll?')) {
+      await axios.post('http://localhost:8080/courses-to-user/create', {
+        user_id: localStorage.getItem(CURRENT_USER_ID),
+        course_id: courseId,
+      });
+      window.location.reload();
+    }
+  }
+  
   
   render() {
     const listOfCourses = this.state.courses.map((each) => (
@@ -78,9 +101,14 @@ class Listings extends Component {
           </CardContent>
           {
             localStorage.getItem(CURRENT_USER_TYPE) === LEARNER_USER_TYPE ?
-              <CardActions>
-                <Button color='primary' size='small'>Enroll</Button>
-              </CardActions>
+              this.state.userCourses.includes(each._id) ?
+                <CardActions>
+                  <Button color='primary' size='small' disabled>Enrolled</Button>
+                </CardActions>
+                :
+                <CardActions>
+                  <Button onClick={(event) => this.handleOnEnroll(event, each._id)} color='primary' size='small'>Enroll</Button>
+                </CardActions>
               : <></>
           }
         </Card>
