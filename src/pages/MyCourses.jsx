@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card, CardContent, Chip, Grid, Typography} from '@material-ui/core';
+import {Button, Card, CardActions, CardContent, Chip, Grid, Typography} from '@material-ui/core';
 import {CURRENT_USER_ID, CURRENT_USER_TYPE, INSTRUCTOR_USER_TYPE} from '../constants';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
@@ -42,9 +42,20 @@ class MyCourses extends Component {
     });
     this.setState({courses: myCourses, users: userMap, userFilterOptions});
   }
+  
+  async handleOnDelete(event, courseId) {
+    event.preventDefault();
+    
+    if(confirm('Are you sure you want to delete this course?')) {
+      await axios.post('http://localhost:8080/course/delete', {id: courseId});
+      window.location.reload();
+    }
+  }
+  
+  
   render() {
     const listOfCourses = this.state.courses.map((each) => (
-      <Grid key={each.id} item>
+      <Grid key={each._id} item>
         <Card style={{width: '500px'}}>
           <CardContent>
             <h2>{each.title}</h2>
@@ -54,6 +65,9 @@ class MyCourses extends Component {
               By <b style={{fontSize: '14px'}}>{this.state.users[each.created_by]}</b>
             </Typography>
           </CardContent>
+          <CardActions>
+            <Button color='primary' variant='contained' size='small' onClick={(e) => this.handleOnDelete(e, each._id)}>Delete</Button>
+          </CardActions>
         </Card>
       </Grid>
     ));
@@ -77,7 +91,12 @@ class MyCourses extends Component {
             </Button>
           </Link>
         </Grid>
-        {listOfCourses}
+        {listOfCourses.length === 0 ?
+          <Typography variant='overline' style={{marginTop: '100px', fontSize: '20px'}}>
+            You have not created any courses.
+          </Typography>
+          : listOfCourses
+        }
       </Grid>
     );
   }
