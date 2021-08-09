@@ -65,9 +65,13 @@ class MyCourses extends Component {
               By <b style={{fontSize: '14px'}}>{this.state.users[each.created_by]}</b>
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button color='primary' variant='contained' size='small' onClick={(e) => this.handleOnDelete(e, each._id)}>Delete</Button>
-          </CardActions>
+          {
+            localStorage.getItem(CURRENT_USER_TYPE) === INSTRUCTOR_USER_TYPE ?
+              <CardActions>
+                <Button color='primary' variant='contained' size='small' onClick={(e) => this.handleOnDelete(e, each._id)}>Delete</Button>
+              </CardActions>
+              : <></>
+          }
         </Card>
       </Grid>
     ));
